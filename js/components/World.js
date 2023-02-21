@@ -45,11 +45,8 @@ class World{
         mainLight.position.set(10, 10, 10);
         this.scene.add(ambientLight, mainLight);
 
-        const roundedRectangle = createRoundedRectangleWithText("Hello");
-        roundedRectangle.position.set(0, 0, -2);
-        //this.scene.add(roundedRectangle);
-
-        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -1, 1, -10);
+        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -1.5, 0, -5);
+        createMeshFromImage('./images/physicalComponents/router.svg', this.scene, 0.5, 0, -5);
 
         this.onWindowResize(); 
         window.addEventListener('resize', this.onWindowResize.bind(this), false);

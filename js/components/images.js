@@ -25,8 +25,12 @@ function createMeshFromImage(imagePath, scene, positionX, positionY, positionZ){
             // To color the border and background of the mesh
             const fillColor = path.userData.style.fill;
             if (fillColor !== undefined && fillColor !== 'none') {
+                let colorInside = new Color().setStyle(fillColor).convertSRGBToLinear();
+                if(colorInside == 0xffffff){
+                    colorInside = "red"
+                }
                 const material = new MeshBasicMaterial({
-                    color: new Color().setStyle(fillColor).convertSRGBToLinear(),
+                    color: colorInside,
                     opacity: path.userData.style.fillOpacity,
                     transparent: true,
                     side: DoubleSide,
@@ -63,7 +67,7 @@ function createMeshFromImage(imagePath, scene, positionX, positionY, positionZ){
             }
         });
 
-        groupImage.scale.set(0.02, 0.02, 0.02)
+        groupImage.scale.set(0.008, 0.008, 0.008)
         groupImage.scale.y *= -1;
         groupImage.scale.z *= -1;
         groupImage.position.set(positionX, positionY, positionZ);
