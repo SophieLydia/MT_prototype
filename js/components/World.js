@@ -4,7 +4,6 @@ import { ARButton } from '/node_modules/three/examples/jsm/webxr/ARButton.js';
 import { createRoundedRectangleWithText } from './roundedRectangle.js';
 import { createControls } from './controls.js';
 import { createMeshFromImage } from './images.js';
-import { Mesh, TextureLoader } from 'three';
 
 class World{
 
@@ -50,18 +49,20 @@ class World{
         roundedRectangle.position.set(0, 0, -2);
         //this.scene.add(roundedRectangle);
 
-        const testPC = createMeshFromImage('./images/physicalComponents/PC.svg');
-        this.scene.add(testPC);
-       
-        this.renderer.setAnimationLoop(function () {
-            this.renderer.render(this.scene, this.camera);
-        }.bind(this));
+        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -1, 1, -10);
 
         this.onWindowResize(); 
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
+
     }
 
     // ------------------ end constructor -------------------------------------
+
+    start(){
+        this.renderer.setAnimationLoop(function () {
+            this.renderer.render(this.scene, this.camera);
+        }.bind(this));
+    }
 
     onWindowResize(){
         this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -93,8 +94,6 @@ class World{
 		this.xrSession = null;
 		this.gl = null;
 	}
-
-  
 }
 
-export { World }
+export { World };
