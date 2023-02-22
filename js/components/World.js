@@ -45,8 +45,8 @@ class World{
         mainLight.position.set(10, 10, 10);
         this.scene.add(ambientLight, mainLight);
 
-        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -1.5, 0, -5);
-        createMeshFromImage('./images/physicalComponents/router.svg', this.scene, 0.5, 0, -5);
+        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -0.5, 0, -3);
+        createMeshFromImage('./images/physicalComponents/router.svg', this.scene, 0.3, 0, -3);
 
         this.onWindowResize(); 
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
