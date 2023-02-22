@@ -1,7 +1,6 @@
-import { Scene, PerspectiveCamera, WebGLRenderer, MeshBasicMaterial, MeshStandardMaterial, BoxGeometry } from 'three';
+import { Scene, PerspectiveCamera, WebGLRenderer } from 'three';
 import { HemisphereLight, DirectionalLight } from 'three';
 import { ARButton } from '/node_modules/three/examples/jsm/webxr/ARButton.js';
-import { createRoundedRectangleWithText } from './roundedRectangle.js';
 import { createControls } from './controls.js';
 import { createMeshFromImage } from './images.js';
 
@@ -45,12 +44,10 @@ class World{
         mainLight.position.set(10, 10, 10);
         this.scene.add(ambientLight, mainLight);
 
-        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -0.5, 0, -3);
-        createMeshFromImage('./images/physicalComponents/router.svg', this.scene, 0.3, 0, -3);
+        this.createScenario();
 
         this.onWindowResize(); 
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
-
     }
 
     // ------------------ end constructor -------------------------------------
@@ -59,6 +56,11 @@ class World{
         this.renderer.setAnimationLoop(function () {
             this.renderer.render(this.scene, this.camera);
         }.bind(this));
+    }
+
+    createScenario(){
+        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -0.5, 0, -3);
+        createMeshFromImage('./images/physicalComponents/router.svg', this.scene, 0.3, 0, -3);
     }
 
     onWindowResize(){
