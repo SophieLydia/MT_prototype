@@ -59,8 +59,9 @@ class World{
     }
 
     createScenario(){
-        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -0.5, 0, -3);
-        createMeshFromImage('./images/physicalComponents/router.svg', this.scene, 0.3, 0, -3);
+        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -0.5, 0, -3, true);
+        createMeshFromImage('./images/physicalComponents/powerPort.svg', this.scene, -0.45, -0.1, -3, false);
+        createMeshFromImage('./images/physicalComponents/modem.svg', this.scene, 0.3, 0, -3, true);
     }
 
     onWindowResize(){

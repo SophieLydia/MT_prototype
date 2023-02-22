@@ -2,7 +2,7 @@ import { MeshBasicMaterial, Mesh, ExtrudeGeometry } from "three";
 import { SVGLoader } from '/node_modules/three/examples/jsm/loaders/SVGLoader.js'
 import { Group, Color, DoubleSide } from "three";
 
-function createMeshFromImage(imagePath, scene, positionX, positionY, positionZ){
+function createMeshFromImage(imagePath, scene, positionX, positionY, positionZ, baseElement){
 
     let loader = new SVGLoader();
     loader.load(imagePath, (data) => {
@@ -30,7 +30,8 @@ function createMeshFromImage(imagePath, scene, positionX, positionY, positionZ){
                     opacity: path.userData.style.fillOpacity,
                     transparent: true,
                     side: DoubleSide,
-                    depthWrite: false
+                    depthWrite: false, 
+                    depthTest: baseElement
                 });
 
                 const shapes = path.toShapes(true);
@@ -50,7 +51,8 @@ function createMeshFromImage(imagePath, scene, positionX, positionY, positionZ){
                     opacity: path.userData.style.strokeOpacity,
                     transparent: true,
                     side: DoubleSide,
-                    depthWrite: false
+                    depthWrite: false,
+                    depthTest: baseElement
                 });
                 for (let j = 0, jl = path.subPaths.length; j < jl; j++) {
                     const subPath = path.subPaths[ j ];
@@ -67,6 +69,11 @@ function createMeshFromImage(imagePath, scene, positionX, positionY, positionZ){
         groupImage.scale.y *= -1;
         groupImage.scale.z *= -1;
         groupImage.position.set(positionX, positionY, positionZ);
+        if(baseElement){
+            groupImage.renderOrder = 0;
+        }else{
+            groupImage.renderOrder = 1;
+        } 
         scene.add(groupImage);   
     });
 }
