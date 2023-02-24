@@ -1,8 +1,8 @@
 import { Scene, PerspectiveCamera, WebGLRenderer } from 'three';
 import { HemisphereLight, DirectionalLight } from 'three';
-import { ARButton } from '/node_modules/three/examples/jsm/webxr/ARButton.js';
 import { createControls } from './controls.js';
-import { createMeshFromImage } from './images.js';
+import { ImageLoad } from './ImageLoad.js';
+import { WebXRsetup } from './WebXRsetup.js';
 
 class World{
 
@@ -10,9 +10,7 @@ class World{
     renderer;
     scene;
 
-    gl;
-    xrRefSpace;
-    xrSession;
+    controls;
 
     constructor(container){
         this.camera = new PerspectiveCamera(
@@ -31,9 +29,12 @@ class World{
 
         container.append(this.renderer.domElement);
 
-        this.setUpXR();
+        const webXRsetup = new WebXRsetup(this.renderer, this.scene);
 
-        const controls = createControls(this.camera, this.renderer.domElement);
+        webXRsetup.setUpXR();
+
+        this.controls = createControls(this.camera, this.renderer.domElement);
+        this.controls.enableDamping = true;
 
         const ambientLight = new HemisphereLight(
             'white', // bright sky color
@@ -44,7 +45,7 @@ class World{
         mainLight.position.set(10, 10, 10);
         this.scene.add(ambientLight, mainLight);
 
-        this.createScenario();
+        const imageLoad = new ImageLoad(this.scene);
 
         this.onWindowResize(); 
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
@@ -54,46 +55,16 @@ class World{
 
     start(){
         this.renderer.setAnimationLoop(function () {
+            this.controls.update();
             this.renderer.render(this.scene, this.camera);
         }.bind(this));
-    }
-
-    createScenario(){
-        createMeshFromImage('./images/physicalComponents/PC.svg', this.scene, -0.5, 0, -3, true);
-        createMeshFromImage('./images/physicalComponents/powerPort.svg', this.scene, -0.45, -0.1, -3, false);
-        createMeshFromImage('./images/physicalComponents/modem.svg', this.scene, 0.3, 0, -3, true);
-    }
+    }    
 
     onWindowResize(){
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
     }
-
-    setUpXR(){
-        document.body.appendChild(ARButton.createButton(this.renderer));
-        
-        this.renderer.xr.enabled = true;
-
-        this.renderer.xr.addEventListener("sessionstart", this.onSessionStarted.bind(this));
-		this.renderer.xr.addEventListener("sessionend", this.onSessionEnded.bind(this));
-
-    }
-
-    onSessionStarted(session) {
-        this.xrSession = this.renderer.xr.getSession();
-		this.gl = this.renderer.getContext();
-
-		this.xrSession.requestReferenceSpace("local").then((refSpace) => {
-			this.xrRefSpace = refSpace;
-		})
-		//this.xrSession.requestAnimationFrame(this.onXRFrame.bind(this));
-	}
-
-	onSessionEnded(event) {
-		this.xrSession = null;
-		this.gl = null;
-	}
 }
 
 export { World };
