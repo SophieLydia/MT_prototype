@@ -1,3 +1,4 @@
+import { BoxGeometry, MeshStandardMaterial, Mesh } from 'three';
 import { ARButton } from '/node_modules/three/examples/jsm/webxr/ARButton.js';
 
 class WebXRsetup {
@@ -11,15 +12,15 @@ class WebXRsetup {
 
     tracktableImages;
 
+    cube;
+
     constructor(renderer, scene){
         this.renderer = renderer;
         this.scene = scene;
 
         this.tracktableImages = [];
         const imageNames = ["atom.jpg", "cables.jpg", "computer.jpg",
-            "device_router.jpg", "earth_grass.jpg", "egypt_eolien.jpg",
-            "energy.jpg", "ethernet_connection.jpg", "human.jpg",
-            "light_plant.jpg", "nuclear.jpg", "prise.jpg", "solar_cables.jpg"];
+            "energy.jpg", "prise.jpg"];
         const dir = './images/markers/';
         for(let i=0; i<imageNames.length; i++){
             let source = dir+imageNames[i];
@@ -29,6 +30,14 @@ class WebXRsetup {
                 this.addImage(image);
             }
         }
+
+        const geometry = new BoxGeometry(0.2, 0.2, 0.2);
+        const material = new MeshStandardMaterial({color: "green"});
+        this.cube = new Mesh(geometry, material);
+        this.cube.position.set(0, 0, -4);
+        this.cube.rotateX(0.1);
+        this.cube.rotateY(0.2);
+        this.scene.add(this.cube);
     }
 
     setUpXR(){
@@ -60,38 +69,82 @@ class WebXRsetup {
     }
     
     animationFrameXR(timestamp, frame){
-        if(frame){
+        //if(frame){
+        if(this.xrSession){
+            this.xrSession.requestAnimationFrame(this.animationFrameXR.bind(this));
+            
+            const session = frame.session;
+            const baseLayer = session.renderState.baseLayer;
 
-            const results = frame.getImageTrackingResults();
+            const pose = frame.getViewerPose(this.xrRefSpace);
+
+            if(pose){
+                for( const view of pose.views){
+                    const viewport = baseLayer.getViewport(view);
+                    this.gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
+
+                    // Get the results from the tracked images
+                    const results = frame.getImageTrackingResults();
             
-            for (const result of results){
-                console.log(result)
-                // The result's index is the image's position in the tracktableImages 
-                // array specified at session creation
-                const imageIndex = result.index;
-    
-                // Get the pose of the image relative to a referencd space
-                const pose = frame.getPose(result.imageSpace, this.xrRefSpace);
-                let pos = pose.transform.position;
-                let quat = pose.transform.orientation;
-    
-                const state = result.trackingState;
+                    for (const result of results){
+                        // The result's index is the image's position in the tracktableImages 
+                        // array specified at session creation
+                        const imageIndex = result.index;
             
-                // atom.jpg
-                if(imageIndex == 1){
-                    if(state == "tracked"){
-                        console.log("PASS")
+                        // Get the pose of the image relative to a referencd space
+                        const pose1 = frame.getPose(result.imageSpace, this.xrRefSpace);
+                        let pos = pose1.transform.position;
+                        let quat = pose1.transform.orientation;
+            
+                        const state = result.trackingState;
+                    
+                        if(imageIndex == 0){
+                            if(state == "tracked"){
+                                console.log("PASS 0")
+                            }
+                            // children 0 and 1 are the lights
+                            // child 2 is the PC
+                            //this.cube.position.copy(pos.toJSON());
+                            //this.cube.quaternion.copy(quat.toJSON());
+                            //let distance = this.cube.max.distanceTo(new Vector3(this.cube.max.x, this.cube.max.y, this.cube.min.z))
+                            //this.cube.translateY(- distance);
+                            //HighlightImage(imageIndex, pose);
+                            //this.cube.position.set(0, -0.5, -1);
+                            //white energy cable
+                            this.cube.material.color.setHex(0xffffff);
+                        }
+                        if(imageIndex == 1){
+                            if(state == "tracked"){
+                                console.log("PASS 1")
+                            }
+                            //black computer
+                            this.cube.material.color.setHex(0x000000);
+                        }
+                        if(imageIndex == 2){
+                            if(state == "tracked"){
+                                console.log("PASS 2")
+                            }
+                            //red atom
+                            this.cube.material.color.setHex(0xff0000);
+                        }
+                        if(imageIndex == 3){
+                            if(state == "tracked"){
+                                console.log("PASS 3")
+                            }
+                            //blue energy
+                            this.cube.material.color.setHex(0x0000ff);
+                        }
+                        if(imageIndex == 4){
+                            if(state == "tracked"){
+                                console.log("PASS 4")
+                            }
+                            //fuchsia prise
+                            this.cube.material.color.setHex(0xff00ff);
+                        }
                     }
-                    // children 0 and 1 are the lights
-                    // child 2 is the PC
-                    this.scene.children[2].position.copy(pos.toJSON());
-                    this.scene.children[2].quaternion.copy(quat.toJSON());
-                    HighlightImage(imageIndex, pose);
                 }
-
             }
         }
-        this.xrSession.requestAnimationFrame(this.animationFrameXR.bind(this));
     }
 
     async addImage(marker) {

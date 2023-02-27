@@ -36,7 +36,7 @@ class ImageLoad {
         this.router_LANport1 = await this.createMesh('./images/physicalComponents/LANport.svg', false);
         this.router_LANport2 = await this.createMesh('./images/physicalComponents/LANport.svg', false);
         this.router_WANport = await this.createMesh('./images/physicalComponents/WANport.svg', false);
-    
+        
         this.pc.position.set(-1, 0, -3);
         this.pc_powerPort.position.set(-0.95, -0.1, -3);
         this.pc_LANport.position.set(-0.75, -0.09, -3);
@@ -122,7 +122,6 @@ class ImageLoad {
                     groupImage.renderOrder = 1;
                 } 
                 this.elements.push(groupImage);
-                //this.scene.add(groupImage);
                 return resolve(groupImage);
             });
         });
