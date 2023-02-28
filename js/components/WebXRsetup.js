@@ -19,8 +19,8 @@ class WebXRsetup {
         this.scene = scene;
 
         this.tracktableImages = [];
-        const imageNames = ["atom.jpg", "cables.jpg", "computer.jpg",
-            "energy.jpg", "prise.jpg"];
+        const imageNames = ["cables.jpg", "computer.jpg",
+            "energy.jpg", "prise.jpg", "router.jpg"];
         const dir = './images/markers/';
         for(let i=0; i<imageNames.length; i++){
             let source = dir+imageNames[i];
@@ -34,7 +34,7 @@ class WebXRsetup {
         const geometry = new BoxGeometry(0.2, 0.2, 0.2);
         const material = new MeshStandardMaterial({color: "green"});
         this.cube = new Mesh(geometry, material);
-        this.cube.position.set(0, 0, -4);
+        this.cube.position.set(0, -1, -4);
         this.cube.rotateX(0.1);
         this.cube.rotateY(0.2);
         this.scene.add(this.cube);
@@ -102,45 +102,39 @@ class WebXRsetup {
                             if(state == "tracked"){
                                 console.log("PASS 0")
                             }
-                            // children 0 and 1 are the lights
-                            // child 2 is the PC
-                            //this.cube.position.copy(pos.toJSON());
-                            //this.cube.quaternion.copy(quat.toJSON());
-                            //let distance = this.cube.max.distanceTo(new Vector3(this.cube.max.x, this.cube.max.y, this.cube.min.z))
-                            //this.cube.translateY(- distance);
-                            //HighlightImage(imageIndex, pose);
-                            //this.cube.position.set(0, -0.5, -1);
-                            //white energy cable
+                            //white router
                             this.cube.material.color.setHex(0xffffff);
                         }
                         if(imageIndex == 1){
                             if(state == "tracked"){
                                 console.log("PASS 1")
                             }
-                            //black computer
+                            //black cable
                             this.cube.material.color.setHex(0x000000);
                         }
                         if(imageIndex == 2){
                             if(state == "tracked"){
                                 console.log("PASS 2")
                             }
-                            //red atom
+                            //red computer
                             this.cube.material.color.setHex(0xff0000);
                         }
                         if(imageIndex == 3){
                             if(state == "tracked"){
                                 console.log("PASS 3")
                             }
-                            //blue energy
+                            //blue prise energy
                             this.cube.material.color.setHex(0x0000ff);
                         }
+                        
                         if(imageIndex == 4){
                             if(state == "tracked"){
                                 console.log("PASS 4")
                             }
-                            //fuchsia prise
+                            //fuchsia energy
                             this.cube.material.color.setHex(0xff00ff);
                         }
+                        
                     }
                 }
             }

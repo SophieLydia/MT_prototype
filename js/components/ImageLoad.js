@@ -36,18 +36,26 @@ class ImageLoad {
         this.router_LANport1 = await this.createMesh('./images/physicalComponents/LANport.svg', false);
         this.router_LANport2 = await this.createMesh('./images/physicalComponents/LANport.svg', false);
         this.router_WANport = await this.createMesh('./images/physicalComponents/WANport.svg', false);
-        
+        this.pc_cable_router = await this.createMesh('./images/physicalComponents/cable.svg', false)
+
         this.pc.position.set(-1, 0, -3);
         this.pc_powerPort.position.set(-0.95, -0.1, -3);
         this.pc_LANport.position.set(-0.75, -0.09, -3);
-        this.router.position.set(0, 0, -3);
-        this.router_powerPort.position.set(0.05, -0.26, -3);
-        this.router_LANport1.position.set(0.25, -0.25, -3);
-        this.router_LANport2.position.set(0.5, -0.25, -3);
-        this.router_WANport.position.set(0.75, -0.25, -3);
+
+        this.pc_cable_router.position.set(-0.685, 0.23, -3);
+
+        this.router.position.set(-0.05, 0.125, -3);
+        this.router_powerPort.position.set(0.01, -0.135, -3);
+        this.router_LANport1.position.set(0.2, -0.125, -3);
+        this.router_LANport2.position.set(0.45, -0.125, -3);
+        this.router_WANport.position.set(0.7, -0.125, -3);
     
         this.scene.add(this.pc, this.pc_powerPort, this.pc_LANport);
+        this.scene.add(this.pc_cable_router);
         this.scene.add(this.router, this.router_powerPort, this.router_LANport1, this.router_LANport2, this.router_WANport);
+
+        this.replaceMesh('./images/physicalComponents/cable_currentStep.svg');
+        this.replaceMesh('./images/physicalComponents/LANport_wrongMarker.svg', "router", 1);
 
     };
     
@@ -126,6 +134,86 @@ class ImageLoad {
             });
         });
     } 
+
+    async replaceMesh(imagePath, device, portNbr){
+        const name = imagePath.substring(28, imagePath.length-4);
+        if(name == "cable" || name == "cable_currentStep" ||
+            name == "cable_rightMarker" || name == "cable_wrongMarker"){
+                const pos = this.pc_cable_router.position;
+                this.scene.remove(this.pc_cable_router);
+                this.pc_cable_router = await this.createMesh(imagePath, false);
+                this.pc_cable_router.position.copy(pos);
+                this.scene.add(this.pc_cable_router);
+        }
+        else if(name == "PC" || name == "PC_currentStep" ||
+            name == "PC_rightMarker" || name == "PC_wrongMarker"){
+                const pos = this.pc.position;
+                this.scene.remove(this.pc);
+                this.pc = await this.createMesh(imagePath, true);
+                this.pc.position.copy(pos);
+                this.scene.add(this.pc);
+        }
+        else if(name == "router" || name == "router_currentStep" ||
+            name == "router_rightMarker" || name == "router_wrongMarker"){
+                const pos = this.router.position;
+                this.scene.remove(this.router);
+                this.router = await this.createMesh(imagePath, true);
+                this.router.position.copy(pos);
+                this.scene.add(this.router);
+        }
+        else if(device == "PC"){
+            if(name == "powerPort" || name == "powerPort_currentStep" ||
+                name == "powerPort_rightMarker" || name == "powerPort_wrongMarker"){
+                    const pos = this.pc_powerPort.position;
+                    this.scene.remove(this.pc_powerPort);
+                    this.pc_powerPort = await this.createMesh(imagePath, false);
+                    this.pc_powerPort.position.copy(pos);
+                    this.scene.add(this.pc_powerPort);
+            }
+            else if(name == "LANport" || name == "LANport_currentStep" ||
+                name == "LANport_rightMarker" || name == "LANport_wrongMarker"){
+                    const pos = this.pc_LANport.position;
+                    this.scene.remove(this.pc_LANport);
+                    this.pc_LANport = await this.createMesh(imagePath, false);
+                    this.pc_LANport.position.copy(pos);
+                    this.scene.add(this.pc_LANport);
+            }
+        }
+        else if(device == "router"){
+            if(name == "powerPort" || name == "powerPort_currentStep" ||
+                name == "powerPort_rightMarker" || name == "powerPort_wrongMarker"){
+                    const pos = this.router_powerPort.position;
+                    this.scene.remove(this.router_powerPort);
+                    this.router_powerPort = await this.createMesh(imagePath, false);
+                    this.router_powerPort.position.copy(pos);
+                    this.scene.add(this.router_powerPort);
+            }
+            else if(name == "LANport" || name == "LANport_currentStep" ||
+                name == "LANport_rightMarker" || name == "LANport_wrongMarker"){
+                    if(portNbr == 1){
+                        const pos = this.router_LANport1.position;
+                        this.scene.remove(this.router_LANport1);
+                        this.router_LANport1 = await this.createMesh(imagePath, false);
+                        this.router_LANport1.position.copy(pos);
+                        this.scene.add(this.router_LANport1);
+                    }else if(portNbr == 2){
+                        const pos = this.router_LANport2.position;
+                        this.scene.remove(this.router_LANport2);
+                        this.router_LANport2 = await this.createMesh(imagePath, false);
+                        this.router_LANport2.position.copy(pos);
+                        this.scene.add(this.router_LANport2);
+                    }
+            }
+            else if(name == "WANport" || name == "WANport_currentStep" ||
+                name == "WANport_rightMarker" || name == "WANport_wrongMarker"){
+                    const pos = this.router_WANport.position;
+                    this.scene.remove(this.router_WANport);
+                    this.router_WANport = await this.createMesh(imagePath, false);
+                    this.router_WANport.position.copy(pos);
+                    this.scene.add(this.router_WANport);
+            }
+        }
+    }
 }
 
 /*
