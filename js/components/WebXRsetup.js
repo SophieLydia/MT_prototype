@@ -41,8 +41,10 @@ class WebXRsetup {
     }
 
     setUpXR(){
+        // dom overlay for the next step button
         document.body.appendChild(ARButton.createButton(this.renderer, {
-            optionalFeatures: ["image-tracking"],
+            optionalFeatures: ["dom-overlay", "image-tracking"],
+            domOverlay: {root: document.body},
             trackedImages: this.tracktableImages
         }));
         

@@ -12,32 +12,27 @@ body {
     color: #444;
   }
   
-  h1 {
-    /* position the heading */
-    position: absolute;
-    width: 100%;
-  
-    /* make sure that the heading is drawn on top */
-    z-index: 1;
-  }
-  
   #scene-container {
     /* tell our scene container to take up the full page */
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: skyblue;
+    /* background-color: skyblue; */
   }
 
-  #scene-container-background {
-    /* tell our scene container to take up the full page */
+  button {
+    font-size: 15pt;
+    text-align: center;
     position: absolute;
-    width: 100%;
-    height: 100%;
-  
-    /*
-      Set the container's background color to the same as the scene's
-      background to prevent flashing on load
-    */
-    background-color: skyblue;
+    min-width: 80px;
+    border-radius: 0;
+    z-index: 1;
+  }
+
+  .nextStepButton {
+    top: 15px;
+  }
+
+  :xr-overlay{
+    display: initial;
   }

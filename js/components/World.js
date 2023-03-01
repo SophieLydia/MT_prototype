@@ -1,8 +1,8 @@
 import { Scene, PerspectiveCamera, WebGLRenderer } from 'three';
 import { HemisphereLight, DirectionalLight } from 'three';
 import { createControls } from './controls.js';
-import { ImageLoad } from './ImageLoad.js';
 import { WebXRsetup } from './WebXRsetup.js';
+import { Scenario } from './StepScenario.js';
 
 class World{
 
@@ -45,7 +45,7 @@ class World{
         mainLight.position.set(10, 10, 10);
         this.scene.add(ambientLight, mainLight);
 
-        const imageLoad = new ImageLoad(this.scene);
+        const stepScenario = new Scenario(this.scene);
 
         this.onWindowResize(); 
         window.addEventListener('resize', this.onWindowResize.bind(this), false);

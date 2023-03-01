@@ -53,10 +53,6 @@ class ImageLoad {
         this.scene.add(this.pc, this.pc_powerPort, this.pc_LANport);
         this.scene.add(this.pc_cable_router);
         this.scene.add(this.router, this.router_powerPort, this.router_LANport1, this.router_LANport2, this.router_WANport);
-
-        this.replaceMesh('./images/physicalComponents/cable_currentStep.svg');
-        this.replaceMesh('./images/physicalComponents/LANport_wrongMarker.svg', "router", 1);
-
     };
     
     async createMesh(imagePath, baseElement){   
