@@ -1,5 +1,6 @@
 import { BoxGeometry, MeshStandardMaterial, Mesh } from 'three';
 import { ARButton } from '/node_modules/three/examples/jsm/webxr/ARButton.js';
+import { Scenario } from './Scenario.js';
 
 class WebXRsetup {
 
@@ -11,6 +12,8 @@ class WebXRsetup {
     xrSession;
 
     tracktableImages;
+
+    scenario;
 
     cube;
 
@@ -30,6 +33,8 @@ class WebXRsetup {
                 this.addImage(image);
             }
         }
+
+        this.scenario = new Scenario(this.scene);
 
         const geometry = new BoxGeometry(0.2, 0.2, 0.2);
         const material = new MeshStandardMaterial({color: "green"});
@@ -104,14 +109,14 @@ class WebXRsetup {
                             if(state == "tracked"){
                                 console.log("PASS 0")
                             }
-                            //white router
+                            //white router cable
                             this.cube.material.color.setHex(0xffffff);
                         }
                         if(imageIndex == 1){
                             if(state == "tracked"){
                                 console.log("PASS 1")
                             }
-                            //black cable
+                            //black cable energy
                             this.cube.material.color.setHex(0x000000);
                         }
                         if(imageIndex == 2){
@@ -125,7 +130,7 @@ class WebXRsetup {
                             if(state == "tracked"){
                                 console.log("PASS 3")
                             }
-                            //blue prise energy
+                            //blue energy pc
                             this.cube.material.color.setHex(0x0000ff);
                         }
                         
@@ -133,7 +138,7 @@ class WebXRsetup {
                             if(state == "tracked"){
                                 console.log("PASS 4")
                             }
-                            //fuchsia energy
+                            //fuchsia prise
                             this.cube.material.color.setHex(0xff00ff);
                         }
                         
