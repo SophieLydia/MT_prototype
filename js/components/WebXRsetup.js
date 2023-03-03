@@ -1,6 +1,7 @@
 import { BoxGeometry, MeshStandardMaterial, Mesh } from 'three';
 import { ARButton } from '/node_modules/three/examples/jsm/webxr/ARButton.js';
 import { Scenario } from './Scenario.js';
+import { v4 as uuidv4} from "uuid";
 
 class WebXRsetup {
 
@@ -12,6 +13,7 @@ class WebXRsetup {
     xrSession;
 
     tracktableImages;
+    arrayUUID;
 
     scenario;
 
@@ -22,6 +24,8 @@ class WebXRsetup {
         this.scene = scene;
 
         this.tracktableImages = [];
+        this.arrayUUID = [];
+
         const imageNames = ["cables.jpg", "computer.jpg",
             "prise.jpg"];
         const dir = './images/markers/';
@@ -76,60 +80,54 @@ class WebXRsetup {
     }
     
     animationFrameXR(timestamp, frame){
-        this.xrSession.requestAnimationFrame(this.animationFrameXR.bind(this));
+
         if(this.xrSession){
+            this.xrSession.requestAnimationFrame(this.animationFrameXR.bind(this));            
             
             // Get the results from the tracked images
             const results = frame.getImageTrackingResults();
-            
+
             for (const result of results){
                 // The result's index is the image's position in the tracktableImages 
                 // array specified at session creation
                 const imageIndex = result.index;
+                const imageuuid = this.tracktableImages[imageIndex].identifier;
             
                 const state = result.trackingState;
-                
-                if(imageIndex == 0){
-                    if(state == "tracked"){
-                        console.log("PASS 0")
+
+                if(state=="tracked"){
+                    if(imageuuid == this.arrayUUID[0]){
+                        //white cable
+                        this.cube.material.color.setHex(0xffffff);
                     }
-                    //white cable
-                    this.cube.material.color.setHex(0xffffff);
-                }
-                else if(imageIndex == 1){
-                    if(state == "tracked"){
-                        console.log("PASS 2")
+                    if(imageuuid == this.arrayUUID[1]){
+                        //red computer
+                        this.cube.material.color.setHex(0xff0000);
                     }
-                    //red computer
-                    this.cube.material.color.setHex(0xff0000);
-                }
-                else if(imageIndex == 2){
-                    if(state == "tracked"){
-                        console.log("PASS 3")
+                    if(imageuuid == this.arrayUUID[2]){
+                        //blue prise
+                        this.cube.material.color.setHex(0x0000ff);
+                    } /*
+                    if(imageuuid == this.arrayUUID[3]){
+                        //fuchsia prise
+                        this.cube.material.color.setHex(0xff00ff);
                     }
-                    //blue prise
-                    this.cube.material.color.setHex(0x0000ff);
-                }
-                /*
-                if(imageIndex == 3){
-                    if(state == "tracked"){
-                        console.log("PASS 4")
-                    }
-                    //fuchsia prise
-                    this.cube.material.color.setHex(0xff00ff);
-                }
-                */    
-            }
+                    */ 
+                }   
+            } 
         }
     }
 
     async addImage(marker) {
 		let x = await createImageBitmap(marker)
+        let uuid = uuidv4();
+        this.arrayUUID.push(uuid);
 		this.tracktableImages.push({
             image: x,
             // widthInMeters: specifies the expected measured width 
             // of the image in the real world
-            widthInMeters: 0.1  
+            widthInMeters: 0.1,
+            identifier: uuid  
         });
 	}
 }
