@@ -23,7 +23,7 @@ class WebXRsetup {
 
         this.tracktableImages = [];
         const imageNames = ["cables.jpg", "computer.jpg",
-            "energy.jpg", "prise.jpg", "router.jpg"];
+            "prise.jpg"];
         const dir = './images/markers/';
         for(let i=0; i<imageNames.length; i++){
             let source = dir+imageNames[i];
@@ -76,74 +76,49 @@ class WebXRsetup {
     }
     
     animationFrameXR(timestamp, frame){
-        //if(frame){
+        this.xrSession.requestAnimationFrame(this.animationFrameXR.bind(this));
         if(this.xrSession){
-            this.xrSession.requestAnimationFrame(this.animationFrameXR.bind(this));
             
-            const session = frame.session;
-            const baseLayer = session.renderState.baseLayer;
-
-            const pose = frame.getViewerPose(this.xrRefSpace);
-
-            if(pose){
-                for( const view of pose.views){
-                    const viewport = baseLayer.getViewport(view);
-                    this.gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
-
-                    // Get the results from the tracked images
-                    const results = frame.getImageTrackingResults();
+            // Get the results from the tracked images
+            const results = frame.getImageTrackingResults();
             
-                    for (const result of results){
-                        // The result's index is the image's position in the tracktableImages 
-                        // array specified at session creation
-                        const imageIndex = result.index;
+            for (const result of results){
+                // The result's index is the image's position in the tracktableImages 
+                // array specified at session creation
+                const imageIndex = result.index;
             
-                        // Get the pose of the image relative to a referencd space
-                        const pose1 = frame.getPose(result.imageSpace, this.xrRefSpace);
-                        let pos = pose1.transform.position;
-                        let quat = pose1.transform.orientation;
-            
-                        const state = result.trackingState;
-                    
-                        if(imageIndex == 0){
-                            if(state == "tracked"){
-                                console.log("PASS 0")
-                            }
-                            //white router cable
-                            this.cube.material.color.setHex(0xffffff);
-                        }
-                        if(imageIndex == 1){
-                            if(state == "tracked"){
-                                console.log("PASS 1")
-                            }
-                            //black cable energy
-                            this.cube.material.color.setHex(0x000000);
-                        }
-                        if(imageIndex == 2){
-                            if(state == "tracked"){
-                                console.log("PASS 2")
-                            }
-                            //red computer
-                            this.cube.material.color.setHex(0xff0000);
-                        }
-                        if(imageIndex == 3){
-                            if(state == "tracked"){
-                                console.log("PASS 3")
-                            }
-                            //blue energy pc
-                            this.cube.material.color.setHex(0x0000ff);
-                        }
-                        
-                        if(imageIndex == 4){
-                            if(state == "tracked"){
-                                console.log("PASS 4")
-                            }
-                            //fuchsia prise
-                            this.cube.material.color.setHex(0xff00ff);
-                        }
-                        
+                const state = result.trackingState;
+                
+                if(imageIndex == 0){
+                    if(state == "tracked"){
+                        console.log("PASS 0")
                     }
+                    //white cable
+                    this.cube.material.color.setHex(0xffffff);
                 }
+                else if(imageIndex == 1){
+                    if(state == "tracked"){
+                        console.log("PASS 2")
+                    }
+                    //red computer
+                    this.cube.material.color.setHex(0xff0000);
+                }
+                else if(imageIndex == 2){
+                    if(state == "tracked"){
+                        console.log("PASS 3")
+                    }
+                    //blue prise
+                    this.cube.material.color.setHex(0x0000ff);
+                }
+                /*
+                if(imageIndex == 3){
+                    if(state == "tracked"){
+                        console.log("PASS 4")
+                    }
+                    //fuchsia prise
+                    this.cube.material.color.setHex(0xff00ff);
+                }
+                */    
             }
         }
     }

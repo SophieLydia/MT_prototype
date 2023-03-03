@@ -52,24 +52,27 @@ class ImageLoad {
         this.pc_cable_wall = await this.createMesh('./images/physicalComponents/cable2.svg', false);
         this.router_cable_wall = await this.createMesh('./images/physicalComponents/cable3.svg', false);
 
-        this.pc.position.set(-1, 0, -3);
-        this.pc_powerPort.position.set(-0.95, -0.1, -3);
-        this.pc_LANport.position.set(-0.75, -0.09, -3);
 
-        this.pc_cable_router.position.set(-0.685, 0.23, -3);
-        this.pc_cable_wall.position.set(-0.91, 0.33, -3);
+        const zPosition = -4;
 
-        this.router.position.set(-0.05, 0.125, -3);
-        this.router_powerPort.position.set(0.01, -0.135, -3);
-        this.router_LANport1.position.set(0.2, -0.125, -3);
-        this.router_LANport2.position.set(0.45, -0.125, -3);
-        this.router_WANport.position.set(0.7, -0.125, -3);
+        this.pc.position.set(-1, 0, zPosition);
+        this.pc_powerPort.position.set(-0.95, -0.1, zPosition);
+        this.pc_LANport.position.set(-0.75, -0.09, zPosition);
 
-        this.router_cable_wall.position.set(0.045, -0.235, -3);
+        this.pc_cable_router.position.set(-0.685, 0.23, zPosition);
+        this.pc_cable_wall.position.set(-0.91, 0.33, zPosition);
 
-        this.wall.position.set(1.3, -0.05, -3);
-        this.wall_powerPort1.position.set(1.5, -0.135, -3);
-        this.wall_powerPort2.position.set(1.8, -0.135, -3);
+        this.router.position.set(-0.05, 0.125, zPosition);
+        this.router_powerPort.position.set(0.01, -0.135, zPosition);
+        this.router_LANport1.position.set(0.2, -0.125, zPosition);
+        this.router_LANport2.position.set(0.45, -0.125, zPosition);
+        this.router_WANport.position.set(0.7, -0.125, zPosition);
+
+        this.router_cable_wall.position.set(0.045, -0.235, zPosition);
+
+        this.wall.position.set(1.3, -0.05, zPosition);
+        this.wall_powerPort1.position.set(1.5, -0.135, zPosition);
+        this.wall_powerPort2.position.set(1.8, -0.135, zPosition);
 
         this.scene.add(this.wall, this.wall_powerPort1, this.wall_powerPort2);
         this.scene.add(this.pc, this.pc_powerPort, this.pc_LANport);
@@ -141,7 +144,7 @@ class ImageLoad {
                 groupImage.scale.y *= -1;
                 groupImage.scale.z *= -1;
                     
-                // To superimpose the port components on the device components
+                // To superimpose the port and cable components on the device components
                 if(baseElement){
                     groupImage.renderOrder = 0;
                 }else{
@@ -290,84 +293,5 @@ class ImageLoad {
         }
     }
 }
-
-/*
-
-function createMeshFromImage(imagePath, scene, positionX, positionY, positionZ, baseElement){
-
-    let loader = new SVGLoader();
-    loader.load(imagePath, (data) => {
-
-        let paths = data.paths;
-        const groupImage = new Group();
-
-        const extrusionSettings = {
-            depth: 2,
-            bevelEnabled: false
-        };
-
-        // https://muffinman.io/blog/three-js-extrude-svg-path/
-        // To get the right geometry and material corresponding to an image
-        paths.forEach((path, i) => {
-            // https://github.com/mrdoob/three.js/blob/master/examples/webgl_loader_svg.html
-            // To color the border and background of the mesh
-            const fillColor = path.userData.style.fill;
-            if (fillColor !== undefined && fillColor !== 'none') {
-                const material = new MeshBasicMaterial({
-                    color: new Color().setStyle(fillColor).convertSRGBToLinear(),
-                    opacity: path.userData.style.fillOpacity,
-                    transparent: true,
-                    side: DoubleSide,
-                    depthWrite: false, 
-                    depthTest: baseElement
-                });
-
-                const shapes = path.toShapes(true);
-                shapes.forEach((shape, j) => {
-                    const geometry = new ExtrudeGeometry(shape, extrusionSettings);
-                    const mesh = new Mesh(geometry, material);
-                    groupImage.add(mesh);
-                });
-            }
-
-            // https://github.com/mrdoob/three.js/blob/master/examples/webgl_loader_svg.html
-            // To color inside the mesh
-            const strokeColor = path.userData.style.stroke;
-            if (strokeColor !== undefined && strokeColor !== 'none') {
-                const material = new MeshBasicMaterial({
-                    color: new Color().setStyle(strokeColor).convertSRGBToLinear(),
-                    opacity: path.userData.style.strokeOpacity,
-                    transparent: true,
-                    side: DoubleSide,
-                    depthWrite: false,
-                    depthTest: baseElement
-                });
-                for (let j = 0, jl = path.subPaths.length; j < jl; j++) {
-                    const subPath = path.subPaths[ j ];
-                    const geometry = SVGLoader.pointsToStroke(subPath.getPoints(), path.userData.style);
-                    if (geometry) {
-                        const mesh = new Mesh(geometry, material);
-                        groupImage.add(mesh);
-                    }
-                }
-            }
-        });
-
-        groupImage.scale.set(0.005, 0.005, 0.005)
-        groupImage.scale.y *= -1;
-        groupImage.scale.z *= -1;
-        groupImage.position.set(positionX, positionY, positionZ);
-        
-        // To superimpose the port components on the device components
-        if(baseElement){
-            groupImage.renderOrder = 0;
-        }else{
-            groupImage.renderOrder = 1;
-        } 
-        scene.add(groupImage);   
-    });
-}
-
-*/
 
 export { ImageLoad };

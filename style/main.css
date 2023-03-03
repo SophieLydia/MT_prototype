@@ -29,6 +29,7 @@ body {
     margin: 25px;
   }
 
+  /* to keep the button during AR session */
   :xr-overlay{
     display: initial;
   }
