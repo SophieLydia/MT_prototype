@@ -5,7 +5,9 @@ class Scenario {
 
     currentStep;
     imageLoad;
+
     scene;
+
     doc;
 
     constructor(scene){
@@ -27,7 +29,14 @@ class Scenario {
             // Initial state, scanning a marker doesn't change anything
             // Never goes through this case
             // Step 0: show scenario without highlight
+            // If anyhighlight, put everything in white
             case 0:
+                this.imageLoad.replaceMesh("./images/physicalComponents/PC.svg", "PC");
+                this.imageLoad.replaceMesh("./images/physicalComponents/cable2.svg", "PC");
+                this.imageLoad.replaceMesh("./images/physicalComponents/powerPort.svg", "PC");
+                this.imageLoad.replaceMesh("./images/physicalComponents/powerPort.svg", "wall", 1);
+                this.doc.removeChild(this.doc.lastChild);
+                this.doc.appendChild(document.createTextNode("Starting scenario 1"));
                 break;
             // Step 1: check PC turn on
             case 1:
@@ -64,6 +73,71 @@ class Scenario {
                 this.doc.appendChild(document.createTextNode("The scenario is finished"));
                 console.log("The scenario is finished");
         }
+    }
+
+    // show the component scanned in green or red depending on the current step
+    showImageMarked(component, device, portNbr){
+        let path ="./images/physicalComponents/";
+        switch(this.currentStep){
+            // does nothing on initial step
+            case 0:
+                break;
+            case 1:
+                if(component == "PC" && device == "PC"){
+                    path += component + "_rightMarker.svg";
+                }else{
+                    path += component + "_wrongMarker.svg";
+                }
+                this.imageLoad.replaceMesh(path, device, portNbr);
+                break;
+            case 2:
+                if((component == "cable2" && device == "PC") 
+                || (component == "powerPort" && device == "PC")
+                || (component == "powerPort" && device == "wall" && portNbr == 1)){
+                    path += component + "_rightMarker.svg";
+                }else{
+                    path += component + "_wrongMarker.svg";
+                }
+                this.imageLoad.replaceMesh(path, device, portNbr);
+                break;
+            case 3:
+                if((component == "powerPort" && device == "PC")
+                || (component == "powerPort" && device == "wall" && portNbr == 1)){
+                    path += component + "_rightMarker.svg";
+                }else{
+                    path += component + "_wrongMarker.svg";
+                }
+                this.imageLoad.replaceMesh(path, device, portNbr);
+                break;
+            case 4:
+                if(component == "cable2" && device == "PC"){
+                    path += component + "_rightMarker.svg";
+                }else{
+                    path += component + "_wrongMarker.svg";
+                }
+                this.imageLoad.replaceMesh(path, device, portNbr);
+                break;
+            default:
+            // does nothing
+        }
+    }
+
+    removeImageUuid(uuid, trackedImages){
+        let toRemove = trackedImages.find(element => {
+            return element.identifier === uuid
+        });
+        this.removeImageMarked(toRemove.steps, toRemove.component, toRemove.device, toRemove.portNbr); 
+    }
+
+    // replace colored component with neutral or highlight
+    removeImageMarked(steps, component, device, portNbr){
+        let path;
+        if(steps[this.currentStep]){
+            path ="./images/physicalComponents/" + component + "_currentStep.svg";
+        }else{
+            path ="./images/physicalComponents/" + component + ".svg";
+        }       
+        this.imageLoad.replaceMesh(path, device, portNbr);
     }
 
     /*  Turn the PC on:
