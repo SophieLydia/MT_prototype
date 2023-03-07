@@ -25,17 +25,12 @@ class ImageLoad {
     wall_powerPort1;
     wall_powerPort2;
 
-
-
-    elements;
-
     constructor(scene){
-        this.elements = []
         this.scene = scene;
-    
         this.loadAllMeshes();
     }
 
+    // Load all components of scenario 1 at the right position
     async loadAllMeshes(){
         this.pc = await this.createMesh('./images/physicalComponents/PC.svg', true)
         this.pc_powerPort = await this.createMesh('./images/physicalComponents/powerPort.svg', false);
@@ -52,27 +47,26 @@ class ImageLoad {
         this.pc_cable_wall = await this.createMesh('./images/physicalComponents/cable2.svg', false);
         this.router_cable_wall = await this.createMesh('./images/physicalComponents/cable3.svg', false);
 
-
         const zPosition = -4;
 
-        this.pc.position.set(-1, 0, zPosition);
-        this.pc_powerPort.position.set(-0.95, -0.1, zPosition);
-        this.pc_LANport.position.set(-0.75, -0.09, zPosition);
+        this.pc.position.set(-1.1, 0, zPosition);
+        this.pc_powerPort.position.set(-1.05, -0.1, zPosition);
+        this.pc_LANport.position.set(-0.85, -0.09, zPosition);
 
-        this.pc_cable_router.position.set(-0.685, 0.23, zPosition);
-        this.pc_cable_wall.position.set(-0.91, 0.33, zPosition);
+        this.pc_cable_router.position.set(-0.785, 0.23, zPosition);
+        this.pc_cable_wall.position.set(-1.01, 0.33, zPosition);
 
-        this.router.position.set(-0.05, 0.125, zPosition);
-        this.router_powerPort.position.set(0.01, -0.135, zPosition);
-        this.router_LANport1.position.set(0.2, -0.125, zPosition);
-        this.router_LANport2.position.set(0.45, -0.125, zPosition);
-        this.router_WANport.position.set(0.7, -0.125, zPosition);
+        this.router.position.set(-0.15, 0.125, zPosition);
+        this.router_powerPort.position.set(-0.11, -0.135, zPosition);
+        this.router_LANport1.position.set(0.1, -0.125, zPosition);
+        this.router_LANport2.position.set(0.35, -0.125, zPosition);
+        this.router_WANport.position.set(0.6, -0.125, zPosition);
 
-        this.router_cable_wall.position.set(0.045, -0.235, zPosition);
+        this.router_cable_wall.position.set(-0.07, -0.235, zPosition);
 
-        this.wall.position.set(1.3, -0.05, zPosition);
-        this.wall_powerPort1.position.set(1.5, -0.135, zPosition);
-        this.wall_powerPort2.position.set(1.8, -0.135, zPosition);
+        this.wall.position.set(1.2, -0.05, zPosition);
+        this.wall_powerPort1.position.set(1.4, -0.135, zPosition);
+        this.wall_powerPort2.position.set(1.69, -0.135, zPosition);
 
         this.scene.add(this.wall, this.wall_powerPort1, this.wall_powerPort2);
         this.scene.add(this.pc, this.pc_powerPort, this.pc_LANport);
@@ -80,6 +74,7 @@ class ImageLoad {
         this.scene.add(this.router, this.router_powerPort, this.router_LANport1, this.router_LANport2, this.router_WANport);
     };
     
+    // Create mesh from an image with same geometry and aspect
     async createMesh(imagePath, baseElement){   
         return new Promise((resolve) => {
             let loader = new SVGLoader();
@@ -150,12 +145,12 @@ class ImageLoad {
                 }else{
                     groupImage.renderOrder = 1;
                 } 
-                this.elements.push(groupImage);
                 return resolve(groupImage);
             });
         });
     } 
 
+    // When a component changes of color, it is in fact replaced
     async replaceMesh(imagePath, device, portNbr){
         const name = imagePath.substring(28, imagePath.length-4);
         if(device == "wall"){

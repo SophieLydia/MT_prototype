@@ -1,4 +1,3 @@
-// To describe which component must be highlight in which step 
 import { ImageLoad } from './ImageLoad.js';
 
 class Scenario {
@@ -7,7 +6,6 @@ class Scenario {
     imageLoad;
 
     scene;
-
     doc;
 
     constructor(scene){
@@ -24,18 +22,19 @@ class Scenario {
         this.doc.appendChild(document.createTextNode("Starting scenario 1"));
     }
 
+    // Go back to step 0
     reset(){
         this.currentStep = -1;
         this.getStep();
     }
 
+    // To describe which component must be highlight in which step 
     getStep(){
         this.currentStep += 1;
         switch(this.currentStep){
-            // Initial state, scanning a marker doesn't change anything
-            // Never goes through this case
+            // Go in this step if reset button is clicked
             // Step 0: show scenario without highlight
-            // If anyhighlight, put everything in white
+            // If any highlight, put everything in white
             case 0:
                 this.imageLoad.replaceMesh("./images/physicalComponents/PC.svg", "PC");
                 this.imageLoad.replaceMesh("./images/physicalComponents/cable2.svg", "PC");
@@ -50,7 +49,7 @@ class Scenario {
                 this.doc.removeChild(this.doc.lastChild);
                 this.doc.appendChild(document.createTextNode("Check that the PC is turned on"));
                 break;
-            // Step 2: check power cables connected
+            // Step 2: check power cable connected to power ports
             case 2:
                 this.imageLoad.replaceMesh("./images/physicalComponents/PC.svg", "PC");
                 this.imageLoad.replaceMesh("./images/physicalComponents/cable2_currentStep.svg", "PC");
@@ -81,11 +80,11 @@ class Scenario {
         }
     }
 
-    // show the component scanned in green or red depending on the current step
+    // Show the component scanned in green or red depending on the current step
     showImageMarked(component, device, portNbr){
         let path ="./images/physicalComponents/";
         switch(this.currentStep){
-            // does nothing on initial step
+            // Do nothing 
             case 0:
                 break;
             case 1:
@@ -124,7 +123,7 @@ class Scenario {
                 this.imageLoad.replaceMesh(path, device, portNbr);
                 break;
             default:
-            // does nothing
+            // Do nothing
         }
     }
 
@@ -135,7 +134,7 @@ class Scenario {
         this.removeImageMarked(toRemove.steps, toRemove.component, toRemove.device, toRemove.portNbr); 
     }
 
-    // replace colored component with neutral or highlight
+    // Replace colored component with neutral or highlight
     removeImageMarked(steps, component, device, portNbr){
         let path;
         if(steps[this.currentStep]){

@@ -39,7 +39,7 @@ class WebXRsetup {
         this.arrayPortNbr = [0, 0, 0, 1]
         this.arraySteps = [[false, true, false, false, false], [false, false, true, false, true], [false, false, true, true, false], [false, false, true, true, false]];
 
-        const imageNames = ["cables.jpg", "computer.jpg", "prise.jpg", "energy.jpg"];
+        const imageNames = ["computer.jpg", "cables.jpg", "prise.jpg", "energy.jpg"];
         const dir = './images/markers/';
         for(let i=0; i<imageNames.length; i++){
             let uuid = uuidv4();
@@ -65,7 +65,7 @@ class WebXRsetup {
     }
 
     setUpXR(){
-        // dom overlay for the next step button
+        // dom overlay for the buttons
         document.body.appendChild(ARButton.createButton(this.renderer, {
             optionalFeatures: ["dom-overlay", "image-tracking"],
             domOverlay: {root: document.body},
@@ -76,7 +76,6 @@ class WebXRsetup {
     
         this.renderer.xr.addEventListener("sessionstart", this.onSessionStarted.bind(this));
         this.renderer.xr.addEventListener("sessionend", this.onSessionEnded.bind(this));
-    
     }
     
     onSessionStarted(session) {
@@ -95,7 +94,6 @@ class WebXRsetup {
     }
     
     animationFrameXR(timestamp, frame){
-
         if(this.xrSession){
             this.xrSession.requestAnimationFrame(this.animationFrameXR.bind(this));            
             
@@ -111,29 +109,29 @@ class WebXRsetup {
             
                 const state = result.trackingState;
 
-                // remove marked component when changing step
+                // Remove marked component when changing step
                 if(this.scenario.currentStep != this.step){
                     this.step = this.scenario.currentStep;
                     this.scenario.removeImageUuid(this.lastUUIDtracked, this.tracktableImages);
                 }
 
                 if(state=="tracked"){
-                    // remove old image marked to later show only the new one marked
+                    // Remove old image marked to later show only the new one marked
                     if(this.lastUUIDtracked != 0){
                         this.scenario.removeImageUuid(this.lastUUIDtracked, this.tracktableImages);
                     }
                     this.lastUUIDtracked = imageuuid;
 
-                    // put new image marked
+                    // Show new image marked
                     this.scenario.showImageMarked(trackedImage.component, trackedImage.device, trackedImage.portNbr);
 
-                    // change cube color to see if the marker was scanned
+                    // Change cube color to see if the marker is scanned
                     if(imageuuid == this.arrayUUID[0]){
-                        //white cables : PC
+                        //white computer : PC
                         this.cube.material.color.setHex(0xffffff);
                     }
                     if(imageuuid == this.arrayUUID[1]){
-                        //red computer : cable between PC and wall
+                        //red cables : cable between PC and wall
                         this.cube.material.color.setHex(0xff0000);
                     }
                     if(imageuuid == this.arrayUUID[2]){

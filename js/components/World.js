@@ -35,14 +35,9 @@ class World{
         this.controls = createControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
 
-        const ambientLight = new HemisphereLight(
-            'white', // bright sky color
-            'darkslategrey', // dim ground color
-            5, // intensity
-        ); 
         const mainLight = new DirectionalLight('white', 5);
         mainLight.position.set(10, 10, 10);
-        this.scene.add(ambientLight, mainLight);
+        this.scene.add(mainLight);
 
         this.onWindowResize(); 
         window.addEventListener('resize', this.onWindowResize.bind(this), false);
