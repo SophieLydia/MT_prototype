@@ -18,8 +18,9 @@ body {
     /* background-color: skyblue; */
   }
 
-  .nextStepButton {
-    margin-right: 20px;
+  button {
+    display: block;
+    margin: 5px;
     font-size: 15pt;
     float: right;
     border-radius: 0px;

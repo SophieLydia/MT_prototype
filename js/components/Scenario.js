@@ -20,7 +20,13 @@ class Scenario {
         this.doc = document.getElementById("infoStep");
 
         document.getElementById("nextStep").addEventListener("click", this.getStep.bind(this));
+        document.getElementById("reset").addEventListener("click", this.reset.bind(this));
         this.doc.appendChild(document.createTextNode("Starting scenario 1"));
+    }
+
+    reset(){
+        this.currentStep = -1;
+        this.getStep();
     }
 
     getStep(){
