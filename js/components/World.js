@@ -1,5 +1,5 @@
 import { Scene, PerspectiveCamera, WebGLRenderer } from 'three';
-import { HemisphereLight, DirectionalLight } from 'three';
+import { DirectionalLight } from 'three';
 import { createControls } from './controls.js';
 import { WebXRsetup } from './WebXRsetup.js';
 
