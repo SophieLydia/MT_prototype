@@ -24,8 +24,6 @@ class WebXRsetup {
     arrayPortNbr;
     arraySteps;
 
-    cube;
-
     constructor(renderer, scene){
         this.renderer = renderer;
         this.scene = scene;
@@ -54,14 +52,6 @@ class WebXRsetup {
 
         this.scenario = new Scenario(this.scene);
         this.step = this.scenario.currentStep;
-
-        const geometry = new BoxGeometry(0.2, 0.2, 0.2);
-        const material = new MeshStandardMaterial({color: "green"});
-        this.cube = new Mesh(geometry, material);
-        this.cube.position.set(0, -1, -4);
-        this.cube.rotateX(0.1);
-        this.cube.rotateY(0.2);
-        this.scene.add(this.cube);
     }
 
     setUpXR(){
@@ -124,24 +114,6 @@ class WebXRsetup {
 
                     // Show new image marked
                     this.scenario.showImageMarked(trackedImage.component, trackedImage.device, trackedImage.portNbr);
-
-                    // Change cube color to see if the marker is scanned
-                    if(imageuuid == this.arrayUUID[0]){
-                        //white computer : PC
-                        this.cube.material.color.setHex(0xffffff);
-                    }
-                    if(imageuuid == this.arrayUUID[1]){
-                        //red cables : cable between PC and wall
-                        this.cube.material.color.setHex(0xff0000);
-                    }
-                    if(imageuuid == this.arrayUUID[2]){
-                        //blue prise : power port on PC
-                        this.cube.material.color.setHex(0x0000ff);
-                    }
-                    if(imageuuid == this.arrayUUID[3]){
-                        //fuchsia energy : power port on wall
-                        this.cube.material.color.setHex(0xff00ff);
-                    } 
                 }  
             } 
         }

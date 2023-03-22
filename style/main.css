@@ -11,7 +11,7 @@ body {
   }
   
   #scene-container {
-    /* tell our scene container to take up the full page */
+    /* Tell our scene container to take up the full page */
     width: 100%;
     height: 100%;
     /* background-color: skyblue; */
@@ -30,7 +30,7 @@ body {
     top: 70px;
   }
 
-  /* to keep the button during AR session */
+  /* To keep the button during AR session */
   :xr-overlay{
     display: initial;
   }
